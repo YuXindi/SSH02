@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+        "http://struts.apache.org/dtds/struts-2.5.dtd">
+
+<struts>
+    <!-- 修改常量管理struts 中的action的工程，这个常量的使用，必须引入 spring和struts的整合包，不然spring无法管理struts2 Action 中的实体类-->
+    <constant name="struts.objectFactory" value="spring" />
+    <constant name="struts.i18n.encoding" value="UTF-8"/>
+    <constant name="struts.devMode" value="false" />
+    <constant name="struts.multipart.saveDir" value="/tmp" />
+    <constant name="struts.multipart.maxSize" value="20480000"/>
+
+    <package name="default" extends="struts-default" namespace="/">
+<!--载入页面-->
+
+        <action name="getAllSonglist" class="loadAction" method="getAllSonglist">
+            <result type="chain">getAllArtist</result>
+        </action>
+        <action name="getAllArtist" class="loadAction" method="getAllArtist">
+            <result>/index.jsp</result>
+        </action>
+
+<!--登录注册-->
+        <action name="register" class="registerAction">
+            <result  name="success">/login.jsp</result>
+            <result  name="input">/register.jsp</result>
+        </action>
+
+        <action name="login" class="loginAction" >
+            <result  name="success"  type="chain">getArtistInfo</result>
+            <result name="input">/login.jsp</result>
+        </action>
+        <action name="getArtistInfo" class="loginAction" method="getArtistInfo">
+            <result  type="chain">findHistory</result>
+        </action>
+        <action name="findHistory" class="loginAction" method="findHistory">
+            <result  type="chain">findSonglist</result>
+        </action>
+        <action name="findSonglist" class="loginAction" method="findSonglist">
+            <result  type="chain">findLike</result>
+        </action>
+        <action name="findLike" class="loginAction" method="findLike">
+            <result>/index.jsp</result>
+        </action>
+
+        <action name="findHistory_" class="loginAction" method="findHistory">
+            <result  type="chain">findSonglist_</result>
+        </action>
+        <action name="findSonglist_" class="loginAction" method="findSonglist">
+            <result  type="chain">findLike_</result>
+        </action>
+        <action name="findLike_" class="loginAction" method="findLike">
+            <result>/My_user/main.jsp</result>
+        </action>
+
+        <action name="exitLogin" class="exitLoginAction">
+            <result  name="success">/index.jsp</result>
+        </action>
+
+<!-- 修改个人信息 -->
+        <action name="toXgMyInfo">
+            <result >/My_user/XgMyInfo.jsp</result>
+        </action>
+        <action name="updateUser" class="updateUserAction" method="updateInfo">
+            <result name="success">/My_user/main.jsp</result>
+            <result name="input">/My_user/XgMyInfo.jsp</result>
+        </action>
+
+        <action name="toXgMyPwd">
+            <result >/My_user/XgMyPwd.jsp</result>
+        </action>
+        <action name="XgMyPwd" class="updateUserAction" method="updatePwd">
+            <result name="success">login.jsp</result>
+            <result name="input">/My_user/XgMyPwd.jsp</result>
+        </action>
+
+        <action name="toXgMyPhoto">
+            <result >/My_user/XgMyPhoto.jsp</result>
+        </action>
+        <action name="updatePhoto" class="updateUserAction" method="updatePhoto">
+            <!--
+                <interceptor-ref name="fileUpload">
+                    <param name="allowedTypes">image/png,image/jpg</param>
+                </interceptor-ref>-->
+            <result name="success"  type="chain">toXgMyInfo</result>
+            <result name="input">/My_user/XgMyPhoto.jsp</result>
+        </action>
+        <action name="notXgMyPhoto">
+            <result type="chain">toXgMyInfo</result>
+        </action>
+
+<!--歌单-->
+        <action name="find_songlist" class="Find_Song_List">
+            <result name="success">/Song_List/Song_Catalog.jsp</result>
+        </action>
+
+        <action name="downloadMusic" class="Download_Music">
+            <result name="success" type="stream">
+                <param name="contentType">application/octet-stream</param>
+                <param name="inputName">InputStream</param>
+                <param name="contentDisposition">filename=${FileName}</param>
+                <param name="bufferSize">20480000</param><!-- 输出时缓冲区的大小 -->
+            </result>
+        </action>
+
+        <action name="insert_recentsong" class="Insert_Recent_Song">
+            <result name="success" type="chain">reFindHistory2</result>
+        </action>
+        <action name="reFindHistory2" class="loginAction" method="findHistory">
+            <result>/Music_Playing.jsp </result>
+        </action>
+
+        <action name="insert_favorite_songlist" class="Insert_Favorite_SongList">
+            <result  name="success" type="chain">refindSongList2</result>
+        </action>
+        <action name="refindSongList2" class="loginAction" method="findSonglist">
+            <result >/Song_List/Song_Catalog.jsp </result>
+        </action>
+
+        <action name="insert_favorite_song" class="Insert_Favorite_Song">
+            <result  name="success" type="chain">reFindLike2</result>
+            <result  name="search">/find_end.jsp</result>
+            <result  name="ok" type="chain">findHistory_</result>
+            <result  name="yyr" type="chain">toArtistMain</result>
+            <result  name="thisYyr">/Artist/thisArtistMain.jsp</result>
+        </action>
+        <action name="reFindLike2" class="loginAction" method="findLike">
+            <result  >/Song_List/Song_Catalog.jsp</result>
+        </action>
+
+        <action name="delete_mylist" class="Delete_Song" method="deletesonglist">
+            <result name="success" type="chain">reFindSongList </result>
+        </action>
+        <action name="reFindSongList" class="loginAction" method="findSonglist">
+            <result >/My_user/main.jsp </result>
+        </action>
+
+        <action name="delete_myrecent" class="Delete_Song" method="deleterecent">
+            <result name="success" type="chain">reFindHistory </result>
+        </action>
+        <action name="reFindHistory" class="loginAction" method="findHistory">
+            <result >/My_user/main.jsp </result>
+        </action>
+
+        <action name="delete_myfavorite" class="Delete_Song" method="deletefavorite">
+            <result  name="success" type="chain">reFindLike</result>
+            <result  name="ok" type="chain">reFindLike2</result>
+            <result  name="search">/find_end.jsp</result>
+            <result  name="yyr" type="chain">toArtistMain</result>
+            <result  name="thisYyr">/Artist/artistMain.jsp</result>
+        </action>
+        <action name="reFindLike" class="loginAction" method="findLike">
+            <result >/My_user/main.jsp </result>
+        </action>
+
+        <action name="searchfind" class="Find_Value">
+            <result  name="success">/find_end.jsp</result>
+        </action>
+
+<!--音乐人-->
+
+        <action name="toArtist" class="toThisArtistAction" >
+            <result  name="success">/Artist/thisArtistMain.jsp</result>
+        </action>
+
+        <action name="artistRegister" class="artistRegisterAction">
+            <result  name="success" type="chain">saveArtistInfo</result>
+            <result  name="input">/Artist/artist_register.jsp</result>
+        </action>
+        <action name="saveArtistInfo" class="loginAction" method="getArtistInfo">
+            <result type="chain">reGetArtist</result>
+        </action>
+        <action name="reGetArtist" class="loadAction" method="getAllArtist">
+            <result>/index.jsp</result>
+        </action>
+
+
+        <action name="toArtistMain" class="toArtistMainAction" >
+            <result>/Artist/main.jsp</result>
+        </action>
+
+        <action name="toUploadWork" >
+            <result>/Artist/uploadWork.jsp</result>
+        </action>
+        <action name="uploadWork" class="uploadWorkAction" >
+            <result  name="success" type="chain">toArtistMain</result>
+            <result  name="input">/Artist/uploadWork.jsp</result>
+        </action>
+
+    </package>
+</struts>

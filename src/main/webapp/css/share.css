@@ -1,0 +1,33 @@
+@charset "utf-8";
+/* CSS Document */
+*{margin:0px; padding:0px;}
+div.top{width:100%; height:80px; background-color:#333; border-bottom:1px solid #999;}
+
+a{color:#999; text-decoration:none; }
+a:hover{color:#FFF;}
+td a:hover{color:black;}
+
+div.bot{width:100%; height:150px; background-image:url(../images/bg.PNG);border-top:1px solid #CCC;}
+	.a2{font-size:12px;}
+	.a2:hover{text-decoration:underline; color:#666;}
+	
+span.span1{  color:#F00; font-size:14px; text-decoration: none;}
+span.error{  color:#F00; font-size:14px;}
+	input.xg{
+                border: 2px solid #c2c2d6; 
+                width:200px;
+                height:40px;
+                border-radius: 3px; /*css3属性IE不支持*/
+            }
+    .xgButton{
+                width:100px;
+                height:50px;
+                font-size:16px;
+                border-radius: 3px; /*css3属性IE不支持*/
+              /*  margin-left:60px; */
+                background-image:url(../images/bg.PNG);
+            }
+     .xgButton:hover{
+			box-shadow:0 10px 10px rgba(0,0,0,0.2);
+        	transform: translate(0,-1px);
+		}

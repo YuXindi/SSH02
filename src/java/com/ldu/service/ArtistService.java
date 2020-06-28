@@ -1,0 +1,14 @@
+package com.ldu.service;
+
+import com.ldu.model.Artist;
+import com.ldu.model.ArtistWork;
+
+import java.util.List;
+
+public interface ArtistService {
+    Artist getArtistInfo(String username);
+    Artist getArtistInfoByArtname(String artname);
+    void saveArtist(Artist artist);
+    void saveArtistWork(ArtistWork artistWork);
+    List<Artist> getAllArtist();
+}
